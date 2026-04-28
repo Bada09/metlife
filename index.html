@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>rhapsody x MetLife | Use Case & Solução Estratégica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <title>rhapsody x MetLife | Estratégia de Performance</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -14,17 +14,55 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f4f7fc;
-            color: #1a2c3e;
+            font-family: 'DM Sans', sans-serif;
+            background: #ffffff;
+            color: #161c23;
             line-height: 1.5;
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
+        /* ONDAS SVG (Rhapsody Style) */
+        .wave-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .wave-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: -1;
+            pointer-events: none;
+            transform: rotate(180deg);
+        }
+        .hero-wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: 0;
+        }
+        .hero-wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 180px;
+        }
+
+        /* NAVEGAÇÃO */
         .mobile-nav {
             position: sticky;
             top: 0;
-            background: #0b2b4f;
+            background: rgba(22, 28, 35, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 12px 20px;
@@ -32,27 +70,30 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .logo-area-mobile {
+        .logo-area {
             font-weight: 800;
             font-size: 1.3rem;
+            letter-spacing: -0.5px;
         }
-        .logo-area-mobile span:first-child {
-            background: linear-gradient(135deg, #ffb347, #ff914d);
+        .logo-area span:first-child {
+            background: linear-gradient(135deg, #aa7cff, #673ae4);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
-        .logo-area-mobile span:last-child {
+        .logo-area span:last-child {
             color: white;
         }
         .lang-switch {
             display: flex;
             gap: 8px;
-            background: #0f3a5c;
-            padding: 5px 12px;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 12px;
             border-radius: 40px;
+            backdrop-filter: blur(4px);
         }
         .lang-btn {
             background: none;
@@ -60,13 +101,14 @@
             color: #cbd5e1;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.8rem;
-            padding: 4px 8px;
+            font-size: 0.75rem;
+            padding: 4px 10px;
             border-radius: 30px;
+            transition: 0.2s;
         }
         .lang-btn.active {
-            background: #ff914d;
-            color: #0b2b4f;
+            background: #673ae4;
+            color: white;
         }
         .menu-toggle {
             background: none;
@@ -74,12 +116,34 @@
             color: white;
             font-size: 1.6rem;
             cursor: pointer;
+            display: none;
+        }
+        .nav-desktop {
+            display: flex;
+            gap: 32px;
+            background: #161c23;
+            justify-content: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2f36;
+        }
+        .nav-desktop a {
+            color: #e0edf5;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        .nav-desktop a:hover {
+            background: #673ae4;
+            color: white;
         }
         .nav-links-mobile {
             display: none;
             width: 100%;
             flex-direction: column;
-            background: #0f3a5c;
+            background: #161c23;
             border-radius: 20px;
             margin-top: 12px;
             padding: 12px 0;
@@ -92,29 +156,54 @@
             text-decoration: none;
             padding: 12px 20px;
             font-weight: 500;
-            border-bottom: 1px solid #1e4a76;
+            border-bottom: 1px solid #2a2f36;
+            transition: 0.2s;
         }
+        .nav-links-mobile a:last-child {
+            border-bottom: none;
+        }
+        .nav-links-mobile a:hover {
+            background: #673ae4;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-desktop {
+                display: none;
+            }
+            .hero-wave svg {
+                height: 100px;
+            }
+        }
+
         section {
             max-width: 1280px;
             margin: 32px auto;
             background: white;
             border-radius: 32px;
             padding: 32px 24px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            scroll-margin-top: 80px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid #eef2ff;
         }
         h2 {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 24px;
-            color: #0b2b4f;
-            border-left: 5px solid #ff914d;
+            color: #161c23;
+            border-left: 5px solid #673ae4;
             padding-left: 18px;
         }
         h3 {
             font-size: 1.4rem;
             font-weight: 700;
             margin: 20px 0 12px;
-            color: #1e4a76;
+            color: #1e293b;
         }
         .grid-2col {
             display: grid;
@@ -134,8 +223,8 @@
             }
         }
         .pill {
-            background: #ff914d20;
-            color: #b45309;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #673ae4;
             border-radius: 40px;
             padding: 4px 14px;
             font-weight: 600;
@@ -144,15 +233,21 @@
             margin-bottom: 12px;
         }
         .problem-card, .solution-card {
-            background: #fff5eb;
+            background: #fef9f0;
             border-radius: 28px;
             padding: 24px;
             border: 1px solid #ffe0bf;
             height: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .problem-card:hover, .solution-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
         }
         .solution-card {
-            background: #eef6ff;
-            border-left: 5px solid #ff914d;
+            background: #f5f3ff;
+            border-left: 5px solid #673ae4;
+            border: 1px solid #e0d5ff;
         }
         .conservative-list {
             display: flex;
@@ -163,7 +258,12 @@
             background: #fef9f0;
             border-radius: 24px;
             padding: 18px 22px;
-            border-left: 6px solid #ff914d;
+            border-left: 6px solid #673ae4;
+            transition: 0.2s;
+        }
+        .pain-item:hover {
+            background: #fff5eb;
+            transform: translateX(4px);
         }
         .pain-title {
             font-weight: 800;
@@ -190,37 +290,9 @@
             gap: 12px;
         }
         .benefit-list li i {
-            color: #ff914d;
+            color: #673ae4;
             font-size: 1.2rem;
             width: 28px;
-        }
-        .flex-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            margin: 28px 0;
-        }
-        .stat-box {
-            flex: 1;
-            min-width: 160px;
-            background: #f8fafc;
-            border-radius: 24px;
-            padding: 20px 12px;
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #0b2b4f;
-        }
-        .quote {
-            font-style: italic;
-            font-weight: 500;
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 28px;
-            margin: 24px 0;
         }
         .metbook-card {
             background: linear-gradient(145deg, #fef7e0, #fff4e0);
@@ -229,52 +301,12 @@
             margin: 24px 0;
             border: 1px solid #ffe2a4;
         }
-        .skill-badge {
-            background: #0b2b4f;
-            color: white;
-            border-radius: 100px;
-            padding: 8px 16px;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin: 8px 6px 0 0;
-        }
         .feedback-natural {
             background: #e6f7ec;
             border-radius: 24px;
             padding: 18px;
             margin-top: 20px;
             border-left: 5px solid #2e7d32;
-        }
-        .conceptual-kpi {
-            background: #f0f7ff;
-            border-radius: 20px;
-            padding: 16px;
-            text-align: center;
-            font-weight: 600;
-            color: #0b2b4f;
-            margin-top: 24px;
-        }
-        .timeline-mobile {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 32px 0;
-        }
-        .timeline-step {
-            flex: 1;
-            background: #f1f5f9;
-            border-radius: 24px;
-            padding: 20px;
-            text-align: center;
-            min-width: 160px;
-        }
-        .highlight-gradient {
-            background: linear-gradient(115deg, #0b2b4f 0%, #1f5a8e 100%);
-            border-radius: 32px;
-            padding: 28px;
-            color: white;
-            text-align: center;
-            margin: 32px 0;
         }
         .use-case-full {
             background: #fef3e8;
@@ -284,10 +316,18 @@
             border: 2px solid #ff914d;
         }
         .use-case-title {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #b45309;
             margin-bottom: 16px;
+        }
+        .highlight-gradient {
+            background: linear-gradient(115deg, #161c23 0%, #2d3748 100%);
+            border-radius: 32px;
+            padding: 28px;
+            color: white;
+            text-align: center;
+            margin: 32px 0;
         }
         .footer-note {
             margin-top: 32px;
@@ -298,7 +338,7 @@
             padding-top: 24px;
         }
         .btn-pdf {
-            background: #0b2b4f;
+            background: #673ae4;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -306,9 +346,14 @@
             font-weight: 600;
             cursor: pointer;
             margin: 16px 0;
+            transition: 0.2s;
+        }
+        .btn-pdf:hover {
+            background: #5b21b6;
+            transform: translateY(-2px);
         }
         @media print {
-            .mobile-nav, .lang-switch, .menu-toggle, .btn-pdf, .no-print { display: none; }
+            .mobile-nav, .nav-desktop, .btn-pdf, .hero-wave { display: none; }
         }
         .lang-content {
             display: none;
@@ -316,12 +361,52 @@
         .lang-content.active-lang {
             display: block;
         }
+        .hero {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+        .hero h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #161c23, #673ae4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.3;
+        }
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+        }
+        .quote {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 28px;
+            margin: 24px 0;
+        }
+        .hero-wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: 0;
+        }
+        .hero-wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 180px;
+        }
     </style>
 </head>
 <body>
 
 <div class="mobile-nav">
-    <div class="logo-area-mobile"><span>RHAPSODY</span> <span>x METLIFE</span></div>
+    <div class="logo-area"><span>RHAPSODY</span> <span>x METLIFE</span></div>
     <div class="lang-switch">
         <button class="lang-btn active" data-lang="pt">PT</button>
         <button class="lang-btn" data-lang="en">EN</button>
@@ -329,56 +414,68 @@
     </div>
     <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
     <div class="nav-links-mobile" id="navLinks">
-        <a href="#problemas">Problemas</a>
-        <a href="#solucao">Solução</a>
-        <a href="#usecase">Use Case</a>
-        <a href="#beneficios">Benefícios</a>
+        <a href="#" data-nav="problemas">Problemas</a>
+        <a href="#" data-nav="solucao">Solução</a>
+        <a href="#" data-nav="usecase">Use Case</a>
+        <a href="#" data-nav="beneficios">Benefícios</a>
     </div>
 </div>
 
-<main style="padding: 20px 20px 40px;">
-    <!-- Hero -->
-    <div class="hero" style="text-align: center;">
-        <span class="pill"><i class="fas fa-chart-line"></i> Diagnóstico Estratégico & Solução</span>
-        <h1 style="font-size: 2.4rem;">rhapsody x MetLife<br>Desbloqueando a performance em seguros de vida</h1>
-        <p style="color:#2c5a7a; max-width: 700px; margin: 16px auto;">Como a plataforma rhapsody transforma desafios críticos da MetLife em vantagem competitiva escalável.</p>
-        <button class="btn-pdf" id="savePdfBtn"><i class="fas fa-file-pdf"></i> Salvar apresentação como PDF</button>
+<div class="nav-desktop">
+    <a href="#" data-nav="problemas"><i class="fas fa-chart-line"></i> Problemas</a>
+    <a href="#" data-nav="solucao"><i class="fas fa-microchip"></i> Solução</a>
+    <a href="#" data-nav="usecase"><i class="fas fa-bullhorn"></i> Use Case</a>
+    <a href="#" data-nav="beneficios"><i class="fas fa-gift"></i> Benefícios</a>
+</div>
+
+<!-- ONDA SUPERIOR (RIAPSODY STYLE) -->
+<div class="hero-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#673ae4" fill-opacity="0.05" d="M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,176C672,171,768,181,864,197.3C960,213,1056,235,1152,234.7C1248,235,1344,213,1392,202.7L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        <path fill="#aa7cff" fill-opacity="0.08" d="M0,224L48,213.3C96,203,192,181,288,170.7C384,160,480,160,576,176C672,192,768,224,864,224C960,224,1056,192,1152,181.3C1248,171,1344,181,1392,186.7L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+    </svg>
+</div>
+
+<main style="padding: 20px 20px 40px; position: relative; z-index: 2;">
+    <div class="hero">
+        <span class="pill" id="hero-pill"><i class="fas fa-chart-line"></i> Diagnóstico Estratégico & Solução</span>
+        <h1 id="hero-title">rhapsody x MetLife<br>Desbloqueando a performance em seguros de vida</h1>
+        <p id="hero-sub" style="color:#5b6e8c; max-width: 700px; margin: 16px auto;">Como a plataforma rhapsody transforma desafios críticos da MetLife em vantagem competitiva escalável.</p>
+        <button class="btn-pdf" id="savePdfBtn"><i class="fas fa-file-pdf"></i> <span id="pdf-text">Salvar apresentação como PDF</span></button>
     </div>
 
-    <!-- CONTEÚDO PORTUGUÊS (completo) -->
+    <!-- PORTUGUÊS -->
     <div id="lang-pt" class="lang-content active-lang">
-        <!-- Problemas estruturais -->
-        <section id="problemas">
+        <section id="problemas-pt">
             <h2><i class="fas fa-chart-line"></i> Principais Problemas da MetLife</h2>
             <div class="conservative-list">
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-globe"></i> 1. Mercado pouco maduro</div><div class="pain-desc">Baixa penetração de seguro de vida no Brasil. Cliente pouco educado financeiramente.</div><div class="pain-translation">Mesmo com boa execução, o crescimento é naturalmente mais lento.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-handshake"></i> 2. Processo consultivo</div><div class="pain-desc">Venda exige diagnóstico, conversa longa, confiança. Característica do produto.</div><div class="pain-translation">Menor volume por corretor, alta dependência de qualidade.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-chart-simple"></i> 3. Variabilidade de performance</div><div class="pain-desc">Alguns corretores performam bem, outros não. Normal em vendas consultivas.</div><div class="pain-translation">Crescimento menos previsível, necessidade de treinamento constante.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-brain"></i> 4. Complexidade moderada</div><div class="pain-desc">Seguro de vida não é intuitivo, exige explicação adequada.</div><div class="pain-translation">Aumenta tempo de decisão e pode gerar dúvidas.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-comments"></i> 5. Objeções recorrentes</div><div class="pain-desc">“Não tenho dinheiro”, “vou pensar” – parte natural do processo.</div><div class="pain-translation">Natureza da venda emocional + racional.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-heart"></i> 6. Dependência de confiança</div><div class="pain-desc">Cliente compra segurança, confiança no corretor é central.</div><div class="pain-translation">Construção de carteira leva tempo.</div></div>
-                <div class="pain-item"><div class="pain-title"><i class="fas fa-chalkboard-user"></i> 7. Treinamento contínuo</div><div class="pain-desc">Técnicas precisam ser reforçadas, novos corretores demoram a performar.</div><div class="pain-translation">Normal em operações estruturadas.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-globe"></i> 1. Mercado pouco maduro (externo, não controlável)</div><div class="pain-desc">Baixa penetração de seguro de vida no Brasil. Cliente pouco educado financeiramente. Produto não é prioridade espontânea.</div><div class="pain-translation"><i class="fas fa-comment-dots"></i> Tradução: Mesmo com boa execução, o crescimento é naturalmente mais lento.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-handshake"></i> 2. Processo comercial naturalmente consultivo</div><div class="pain-desc">Venda exige diagnóstico, conversa longa, necessidade de confiança. Isso não é erro — é característica do produto.</div><div class="pain-translation">Implica: menor volume por corretor, maior dependência de qualidade na interação.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-chart-simple"></i> 3. Variabilidade de performance entre corretores</div><div class="pain-desc">Alguns performam muito bem, outros têm dificuldade em conduzir a venda. Normal em vendas consultivas.</div><div class="pain-translation">Impacto: crescimento menos previsível, necessidade constante de treinamento.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-brain"></i> 4. Complexidade moderada do produto</div><div class="pain-desc">Seguro de vida não é intuitivo para o cliente. Exige explicação mínima adequada.</div><div class="pain-translation">Consequência: aumenta o tempo de decisão, pode gerar dúvidas se mal conduzido.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-comments"></i> 5. Objeções recorrentes fazem parte do processo</div><div class="pain-desc">“Não tenho interesse”, “não tenho dinheiro”, “vou pensar”. Isso é esperado nesse tipo de produto.</div><div class="pain-translation">Não indica falha — indica natureza da venda emocional + racional.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-heart"></i> 6. Dependência de relacionamento e confiança</div><div class="pain-desc">Cliente compra mais a segurança do que o produto. Confiança no corretor é central.</div><div class="pain-translation">Consequência: construção de carteira leva tempo, ciclos de venda podem variar.</div></div>
+                <div class="pain-item"><div class="pain-title"><i class="fas fa-chalkboard-user"></i> 7. Treinamento contínuo é necessário</div><div class="pain-desc">Técnicas precisam ser reforçadas. Novos corretores demoram a performar.</div><div class="pain-translation">Normal em operações comerciais estruturadas.</div></div>
             </div>
+            <div class="quote"><i class="fas fa-lightbulb"></i> Conclusão conservadora: Não se trata de “falhas”, mas de características estruturais do mercado e do produto. A rhapsody acelera a adaptação e eficiência dentro desse ambiente real.</div>
         </section>
 
-        <!-- Solução rhapsody -->
-        <section id="solucao">
+        <section id="solucao-pt">
             <h2><i class="fas fa-microchip"></i> Solução rhapsody: ecossistema em 3 camadas</h2>
             <div class="grid-2col">
-                <div class="solution-card"><i class="fas fa-handshake fa-2x" style="color:#ff914d;"></i><h3>1. Execução inteligente</h3><p>Script guiado e adaptativo com gatilhos de comportamento.</p></div>
-                <div class="solution-card"><i class="fas fa-brain fa-2x" style="color:#ff914d;"></i><h3>2. Treinamento com IA</h3><p>Simulação com 4 perfis, feedback instantâneo.</p></div>
-                <div class="solution-card"><i class="fas fa-chart-simple fa-2x" style="color:#ff914d;"></i><h3>3. Gestão data-driven</h3><p>Dashboards de conversão, objeções e melhorias contínuas.</p></div>
+                <div class="solution-card"><i class="fas fa-handshake fa-2x" style="color:#673ae4;"></i><h3>1. Execução inteligente</h3><p>Script guiado e adaptativo que conduz o cliente por fases: Abertura → Diagnóstico → Amplificação → Apresentação → Fechamento leve. Gatilhos de comportamento (curiosidade, contraste, urgência racional).</p></div>
+                <div class="solution-card"><i class="fas fa-brain fa-2x" style="color:#673ae4;"></i><h3>2. Treinamento com IA</h3><p>Simulação de clientes com 4 perfis (cético, procrastinador, sensível, executivo). Feedback instantâneo corrige abordagem em tempo real. Curva de aprendizado acelerada.</p></div>
+                <div class="solution-card"><i class="fas fa-chart-simple fa-2x" style="color:#673ae4;"></i><h3>3. Gestão data-driven</h3><p>Dashboards de conversão por etapa, objeções mais frequentes, tempo médio de fechamento. A IA identifica padrões e sugere melhorias contínuas no playbook.</p></div>
             </div>
             <div class="metbook-card">
-                <i class="fas fa-book-open fa-2x" style="color:#ff914d;"></i>
-                <h3>MetBook: base de conhecimento viva</h3>
-                <p>A rhapsody consulta o MetBook em tempo real, identifica omissões de argumentos e ajuda o corretor a memorizar habilidades de forma natural e fluida.</p>
-                <div class="feedback-natural"><i class="fas fa-comment-dots"></i> Exemplo: “Você não mencionou a continuidade financeira imediata — um dos pilares do MetBook. Que tal incluir isso na próxima fala?”</div>
+                <i class="fas fa-book-open fa-2x" style="color:#673ae4;"></i>
+                <h3>MetBook: a base de conhecimento viva da MetLife</h3>
+                <p>A rhapsody consulta o <strong>MetBook</strong> em tempo real, identifica omissões de argumentos essenciais e ajuda o corretor a memorizar habilidades de forma natural e fluida, sem sobrecarga cognitiva. Durante cada simulação ou interação real, a IA cruza a fala do corretor com o conteúdo do MetBook e aponta lacunas argumentativas.</p>
+                <div class="feedback-natural"><i class="fas fa-comment-dots"></i> <strong>Exemplo de análise fluida:</strong><br>“Você explicou a cobertura, mas não mencionou o benefício da <strong>continuidade financeira imediata</strong> — um dos pilares do MetBook. Que tal incluir essa ponte na próxima fala?”</div>
             </div>
         </section>
 
-        <!-- USE CASE COMPLETO (CAMPO DESTACADO) - SEM SIMULAÇÃO -->
-        <section id="usecase">
+        <section id="usecase-pt">
             <h2><i class="fas fa-bullhorn"></i> 🎯 Use Case: Venda para médico com pouco tempo</h2>
             <div class="use-case-full">
                 <div class="use-case-title">SIMULAÇÃO — METLIFE (VENDA PARA MÉDICO COM POUCO TEMPO)</div>
@@ -388,67 +485,151 @@
                 <p><strong>🧠 PERSONA DO MÉDICO</strong><br>Pragmático, direto, valoriza tempo acima de tudo. Alto nível de renda, pouco tempo para gestão financeira. Já foi abordado por outros corretores. Cético quanto à real necessidade de seguro.</p>
                 <p><strong>🎯 EXPECTATIVA DO CLIENTE</strong><br>Conversa rápida, clareza imediata de valor, nada de discurso genérico. Quer entender “por que isso importa pra mim agora”.</p>
                 <p><strong>⚠️ REGRAS DA CONVERSA</strong><br>Respostas curtas (1–2 frases). O médico interrompe se perceber enrolação, pode encerrar a qualquer momento. Não aceita abordagem superficial nem discurso emocional exagerado.</p>
-                <p><strong>🔥 EIXOS DE OBJEÇÃO (dinâmicos)</strong><br>O médico deve trazer ao longo da conversa: “Não tenho tempo pra isso”, “Já tenho investimentos”, “Nunca precisei de seguro”, “Isso parece mais custo do que benefício”, “Prefiro resolver depois”, “Já fui abordado várias vezes”, “Não vejo urgência nisso”. Deve tratar pelo menos 5 antes de decidir.</p>
+                <p><strong>🔥 EIXOS DE OBJEÇÃO (dinâmicos)</strong><br>O médico deve trazer ao longo da conversa: “Não tenho tempo pra isso”, “Já tenho investimentos”, “Nunca precisei de seguro”, “Isso parece mais custo do que benefício”, “Prefiro resolver depois”, “Já fui abordado várias vezes”, “Não vejo urgência nisso”. O corretor deve tratar pelo menos 5 antes de decidir.</p>
                 <p><strong>📌 BASE METBOOK (OBRIGATÓRIO)</strong><br>O corretor deve demonstrar: quebra de resistência rápida, perguntas abertas e inteligentes (ADN), tangibilização de risco, personalização da conversa, condução objetiva para próximo passo. Evitar discurso genérico, falar só de produto ou falta de direção.</p>
                 <p><strong>🎤 INÍCIO DA SIMULAÇÃO</strong><br><em>“Pode falar, mas seja direto — tenho poucos minutos.”</em></p>
                 <p><strong>🏁 FIM DA SIMULAÇÃO</strong><br>Após as interações, o médico deve aceitar avançar OU recusar claramente. Resposta final em 1 frase.</p>
-                <p><strong>📊 DEBRIEFING (PÓS SIMULAÇÃO)</strong><br>Gera automaticamente análise com: pontos fortes, pontos de melhoria, momentos-chave, reformulações sugeridas e recomendações.</p>
+                <p><strong>📊 DEBRIEFING (PÓS SIMULAÇÃO)</strong><br>Análise automática com: pontos fortes, pontos de melhoria, momentos-chave, reformulações sugeridas e recomendações.</p>
                 <p><strong>⚠️ CRITÉRIOS DE AVALIAÇÃO</strong><br><strong>Positivo:</strong> objetividade, perguntas inteligentes, adaptação ao cliente, condução clara, geração de valor.<br><strong>Negativo:</strong> enrolação, discurso genérico, falta de diagnóstico, não tratar objeções, não avançar a conversa.</p>
             </div>
         </section>
 
-        <!-- Benefícios -->
-        <section id="beneficios">
+        <section id="beneficios-pt">
             <h2><i class="fas fa-gift"></i> Benefícios da parceria rhapsody</h2>
             <div class="grid-2col">
-                <ul class="benefit-list"><li><i class="fas fa-check-circle"></i> Padronização da excelência</li><li><i class="fas fa-clock"></i> Aceleração do ciclo de venda</li><li><i class="fas fa-chart-line"></i> Conversão mais consistente</li><li><i class="fas fa-brain"></i> Aprendizado acelerado</li><li><i class="fas fa-comments"></i> Tratamento eficaz de objeções</li></ul>
-                <ul class="benefit-list"><li><i class="fas fa-chart-pie"></i> Visibilidade total do funil</li><li><i class="fas fa-robot"></i> Treinamento contínuo escalável</li><li><i class="fas fa-heart"></i> Fortalecimento da confiança</li><li><i class="fas fa-cogs"></i> Melhoria contínua baseada em dados</li><li><i class="fas fa-chart-simple"></i> Maior previsibilidade de performance</li></ul>
+                <ul class="benefit-list">
+                    <li><i class="fas fa-check-circle"></i> <strong>Padronização da excelência</strong> – Redução da variabilidade entre corretores.</li>
+                    <li><i class="fas fa-clock"></i> <strong>Aceleração do ciclo de venda</strong> – Menos idas e vindas, decisões mais rápidas.</li>
+                    <li><i class="fas fa-chart-line"></i> <strong>Conversão mais consistente</strong> – Abordagem estruturada e previsível.</li>
+                    <li><i class="fas fa-brain"></i> <strong>Aprendizado acelerado</strong> – Novos corretores atingem maturidade mais rápido.</li>
+                    <li><i class="fas fa-comments"></i> <strong>Tratamento eficaz de objeções</strong> – Respostas adaptativas para cada perfil de cliente.</li>
+                </ul>
+                <ul class="benefit-list">
+                    <li><i class="fas fa-chart-pie"></i> <strong>Visibilidade total do funil</strong> – Gestão identifica gargalos em tempo real.</li>
+                    <li><i class="fas fa-robot"></i> <strong>Treinamento contínuo escalável</strong> – IA disponível 24/7 para simulações.</li>
+                    <li><i class="fas fa-heart"></i> <strong>Fortalecimento da confiança</strong> – Corretor mais seguro, cliente mais atendido.</li>
+                    <li><i class="fas fa-cogs"></i> <strong>Melhoria contínua baseada em dados</strong> – Playbook evolui com campo real.</li>
+                    <li><i class="fas fa-chart-simple"></i> <strong>Maior previsibilidade de performance</strong> – Redução da dependência de talentos individuais.</li>
+                </ul>
             </div>
-            <div class="highlight-gradient"><i class="fas fa-quote-left fa-2x"></i><p>“Não estamos somente treinando melhor o corretor.<br>Estamos transformando a conversa em um sistema escalável.”</p><p>— rhapsody x MetLife</p></div>
+            <div class="highlight-gradient">
+                <i class="fas fa-quote-left fa-2x"></i>
+                <p>“Não estamos somente treinando melhor o corretor.<br>Estamos transformando a conversa em um sistema escalável.”</p>
+                <p>— Estratégia rhapsody x MetLife</p>
+            </div>
         </section>
     </div>
 
-    <!-- INGLÊS (resumido para contexto) -->
+    <!-- INGLÊS -->
     <div id="lang-en" class="lang-content">
-        <section><h2>MetLife's Main Challenges</h2><div class="conservative-list"><div class="pain-item"><div class="pain-title">1. Immature market</div><div class="pain-desc">Low penetration, low financial literacy.</div></div><div class="pain-item"><div class="pain-title">2. Consultative process</div><div class="pain-desc">Requires diagnosis and trust.</div></div></div></section>
-        <section><h2>rhapsody Solution</h2><div class="grid-2col"><div class="solution-card"><h3>Smart execution</h3><p>Adaptive guided script.</p></div><div class="solution-card"><h3>AI training</h3><p>Simulation with 4 profiles.</p></div></div></section>
-        <section><h2>Use Case: Selling to a busy doctor</h2><div class="use-case-full"><p><strong>Scenario:</strong> Doctor with no time, skeptical. <strong>Objective:</strong> generate value, handle objections, advance to next step. The AI simulates the doctor following all rules: short answers, interruption if stalling, dynamic objections.</p><p>The agent must demonstrate quick resistance breaking, intelligent questions (ADN), risk materialization, objective closing. At the end: doctor accepts or refuses clearly. Automatic debriefing with strengths and improvements.</p></div></section>
-        <div class="highlight-gradient"><p>“We are turning the conversation into a scalable system.”</p></div>
+        <section id="problemas-en"><h2><i class="fas fa-chart-line"></i> MetLife's Main Challenges</h2><div class="conservative-list"><div class="pain-item"><div class="pain-title"><i class="fas fa-globe"></i> 1. Immature market</div><div class="pain-desc">Low life insurance penetration in Brazil. Low financial literacy.</div><div class="pain-translation">Even with good execution, growth is naturally slower.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-handshake"></i> 2. Consultative process</div><div class="pain-desc">Sales require diagnosis, longer conversations, trust. Product characteristic.</div><div class="pain-translation">Lower volume per agent, high dependency on quality.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-chart-simple"></i> 3. Performance variability</div><div class="pain-desc">Some agents perform well, others struggle. Normal in consultative sales.</div><div class="pain-translation">Less predictable growth, constant training needed.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-brain"></i> 4. Moderate product complexity</div><div class="pain-desc">Life insurance is not intuitive, requires proper explanation.</div><div class="pain-translation">Increases decision time, may create doubts.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-comments"></i> 5. Recurring objections</div><div class="pain-desc">“No money”, “I'll think” – natural part of the process.</div><div class="pain-translation">Nature of emotional + rational sale.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-heart"></i> 6. Trust dependency</div><div class="pain-desc">Client buys security, trust in agent is central.</div><div class="pain-translation">Portfolio building takes time, cycles vary.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-chalkboard-user"></i> 7. Continuous training needed</div><div class="pain-desc">Techniques must be reinforced, new agents take time to perform.</div><div class="pain-translation">Normal in structured operations.</div></div></div><div class="quote"><i class="fas fa-lightbulb"></i> Conservative conclusion: Not “failures” but structural characteristics. rhapsody accelerates adaptation and efficiency within this real environment.</div></section>
+        <section id="solucao-en"><h2><i class="fas fa-microchip"></i> rhapsody solution: 3-layer ecosystem</h2><div class="grid-2col"><div class="solution-card"><i class="fas fa-handshake fa-2x" style="color:#673ae4;"></i><h3>1. Smart execution</h3><p>Adaptive guided script with behavioral triggers (curiosity, contrast, rational urgency).</p></div><div class="solution-card"><i class="fas fa-brain fa-2x" style="color:#673ae4;"></i><h3>2. AI training</h3><p>Simulation with 4 profiles (skeptic, procrastinator, family-sensitive, busy executive). Instant feedback, accelerated learning.</p></div><div class="solution-card"><i class="fas fa-chart-simple fa-2x" style="color:#673ae4;"></i><h3>3. Data-driven management</h3><p>Conversion dashboards, frequent objections, closing time. AI suggests continuous playbook improvements.</p></div></div><div class="metbook-card"><i class="fas fa-book-open fa-2x" style="color:#673ae4;"></i><h3>MetBook: MetLife's living knowledge base</h3><p>rhapsody continuously accesses MetBook, identifies missing key arguments, and helps agents memorize skills naturally and fluently, without cognitive overload.</p><div class="feedback-natural"><i class="fas fa-comment-dots"></i> <strong>Example:</strong> “You explained the coverage but didn't mention the immediate financial continuity benefit — one of MetBook's pillars. How about adding that next time?”</div></div></section>
+        <section id="usecase-en"><h2><i class="fas fa-bullhorn"></i> 🎯 Use Case: Selling to a busy doctor</h2><div class="use-case-full"><div class="use-case-title">SIMULATION — METLIFE (SELLING TO A TIME-CONSTRAINED DOCTOR)</div><p><strong>🎬 SCENARIO</strong><br>You are a MetLife agent, still developing. You're talking to a doctor: packed schedule, extremely objective, skeptical about life insurance, low tolerance for long conversations. He agreed to talk but made it clear: “I have few minutes.”</p><p><strong>🔴 OBJECTIVE</strong><br>Conduct the conversation efficiently: generate value perception, perform minimal diagnosis (DNA), handle objections, and move to next step or close.</p><p><strong>👥 ROLES</strong><br>{{user_role}}: MetLife agent | {{ai_role}}: doctor (client)</p><p><strong>🧠 DOCTOR'S PERSONA</strong><br>Pragmatic, direct, values time above all. High income, little time for financial management. Already approached by other agents. Skeptical about real need for insurance.</p><p><strong>🎯 CLIENT EXPECTATION</strong><br>Quick conversation, immediate clarity of value, no generic speech. Wants to understand “why this matters to me now”.</p><p><strong>⚠️ CONVERSATION RULES</strong><br>Short answers (1–2 sentences). Doctor interrupts if he senses stalling, may end at any time. Does not accept superficial approach or exaggerated emotional speech.</p><p><strong>🔥 OBJECTION AXES (dynamic)</strong><br>The doctor should bring along the conversation: “I don't have time for this”, “I already have investments”, “I never needed insurance”, “Seems more cost than benefit”, “I'd rather deal with it later”, “I've been approached several times”, “I don't see urgency”. The agent must handle at least 5 before deciding.</p><p><strong>📌 METBOOK BASIS (REQUIRED)</strong><br>Agent must demonstrate: quick resistance breaking, intelligent open questions (DNA), risk tangibilization, conversation personalization, objective next-step conduction. Avoid generic speech, product-only talk, lack of direction.</p><p><strong>🎤 SIMULATION START</strong><br>“Go ahead, but be direct — I have little time.”</p><p><strong>🏁 SIMULATION END</strong><br>After interactions, the doctor must either accept to move forward OR clearly refuse. Final answer in 1 sentence.</p><p><strong>📊 DEBRIEFING (POST-SIMULATION)</strong><br>Automatic analysis with: strengths, improvement points, key moments, suggested reframings, recommendations.</p><p><strong>⚠️ EVALUATION CRITERIA</strong><br><strong>Positive:</strong> objectivity, intelligent questions, client adaptation, clear conduction, value generation.<br><strong>Negative:</strong> stalling, generic speech, lack of diagnosis, not handling objections, not advancing the conversation.</p></div></section>
+        <section id="beneficios-en"><h2><i class="fas fa-gift"></i> rhapsody partnership benefits</h2><div class="grid-2col"><ul class="benefit-list"><li><i class="fas fa-check-circle"></i> Excellence standardization – reduces variability among agents.</li><li><i class="fas fa-clock"></i> Faster sales cycle – quicker decisions.</li><li><i class="fas fa-chart-line"></i> Consistent conversion – structured predictable approach.</li><li><i class="fas fa-brain"></i> Accelerated learning – new agents reach maturity faster.</li><li><i class="fas fa-comments"></i> Effective objection handling – adaptive responses per profile.</li></ul><ul class="benefit-list"><li><i class="fas fa-chart-pie"></i> Full funnel visibility – management spots bottlenecks in real time.</li><li><i class="fas fa-robot"></i> Scalable continuous training – AI available 24/7.</li><li><i class="fas fa-heart"></i> Confidence boost – agent more secure.</li><li><i class="fas fa-cogs"></i> Data-driven continuous improvement – playbook evolves with field experience.</li><li><i class="fas fa-chart-simple"></i> Greater performance predictability – less dependence on individual talent.</li></ul></div><div class="highlight-gradient"><i class="fas fa-quote-left fa-2x"></i><p>“We are not just training the agent better.<br>We are turning the conversation into a scalable system.”</p><p>— rhapsody x MetLife</p></div></section>
     </div>
 
-    <!-- FRANCÊS (resumido) -->
+    <!-- FRANCÊS -->
     <div id="lang-fr" class="lang-content">
-        <section><h2>Principaux défis de MetLife</h2><div class="conservative-list"><div class="pain-item"><div class="pain-title">1. Marché peu mature</div><div class="pain-desc">Faible pénétration au Brésil.</div></div><div class="pain-item"><div class="pain-title">2. Processus consultatif</div><div class="pain-desc">Diagnostic et confiance requis.</div></div></div></section>
-        <section><h2>Solution rhapsody</h2><div class="grid-2col"><div class="solution-card"><h3>Exécution intelligente</h3><p>Script adaptatif.</p></div><div class="solution-card"><h3>Formation IA</h3><p>Simulation avec 4 profils.</p></div></div></section>
-        <section><h2>Cas d'usage: Vente à un médecin pressé</h2><div class="use-case-full"><p><strong>Scénario:</strong> Médecin sans temps, sceptique. <strong>Objectif:</strong> valeur rapide, traiter objections, avancer. L'IA suit toutes les règles: réponses courtes, interruptions, objections dynamiques. L'agent doit démontrer brisage de résistance rapide, questions diagnostiques, concrétisation du risque. Décision finale: accepte ou refuse. Débriefing automatique.</p></div></section>
-        <div class="highlight-gradient"><p>“Nous transformons la conversation en un système évolutif.”</p></div>
+        <section id="problemas-fr"><h2><i class="fas fa-chart-line"></i> Principaux défis de MetLife</h2><div class="conservative-list"><div class="pain-item"><div class="pain-title"><i class="fas fa-globe"></i> 1. Marché peu mature</div><div class="pain-desc">Faible pénétration de l'assurance vie au Brésil. Faible éducation financière.</div><div class="pain-translation">Même avec une bonne exécution, la croissance est naturellement plus lente.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-handshake"></i> 2. Processus consultatif</div><div class="pain-desc">La vente nécessite diagnostic, conversation longue, confiance. Caractéristique du produit.</div><div class="pain-translation">Volume moindre par conseiller, forte dépendance à la qualité.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-chart-simple"></i> 3. Variabilité des performances</div><div class="pain-desc">Certains conseillers performent bien, d'autres non. Normal dans la vente consultative.</div><div class="pain-translation">Croissance moins prévisible, besoin de formation continue.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-brain"></i> 4. Complexité modérée du produit</div><div class="pain-desc">L'assurance vie n'est pas intuitive, nécessite une explication adéquate.</div><div class="pain-translation">Augmente le temps de décision, peut générer des doutes.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-comments"></i> 5. Objections récurrentes</div><div class="pain-desc">« Pas d'argent », « je vais réfléchir » – partie naturelle du processus.</div><div class="pain-translation">Nature de la vente émotionnelle + rationnelle.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-heart"></i> 6. Dépendance à la confiance</div><div class="pain-desc">Le client achète la sécurité, la confiance dans le conseiller est centrale.</div><div class="pain-translation">La construction du portefeuille prend du temps.</div></div><div class="pain-item"><div class="pain-title"><i class="fas fa-chalkboard-user"></i> 7. Formation continue nécessaire</div><div class="pain-desc">Les techniques doivent être renforcées, les nouveaux conseillers mettent du temps à performer.</div><div class="pain-translation">Normal dans les opérations structurées.</div></div></div><div class="quote"><i class="fas fa-lightbulb"></i> Conclusion conservative : Il ne s'agit pas d'« échecs » mais de caractéristiques structurelles. rhapsody accélère l'adaptation et l'efficacité dans cet environnement réel.</div></section>
+        <section id="solucao-fr"><h2><i class="fas fa-microchip"></i> Solution rhapsody: écosystème en 3 couches</h2><div class="grid-2col"><div class="solution-card"><i class="fas fa-handshake fa-2x" style="color:#673ae4;"></i><h3>1. Exécution intelligente</h3><p>Script guidé adaptatif avec déclencheurs comportementaux (curiosité, contraste, urgence rationnelle).</p></div><div class="solution-card"><i class="fas fa-brain fa-2x" style="color:#673ae4;"></i><h3>2. Formation par IA</h3><p>Simulation avec 4 profils (sceptique, procrastinateur, sensible à la famille, cadre occupé). Feedback instantané, courbe d'apprentissage accélérée.</p></div><div class="solution-card"><i class="fas fa-chart-simple fa-2x" style="color:#673ae4;"></i><h3>3. Gestion data-driven</h3><p>Tableaux de bord de conversion, objections fréquentes, délai de clôture. L'IA suggère des améliorations continues du playbook.</p></div></div><div class="metbook-card"><i class="fas fa-book-open fa-2x" style="color:#673ae4;"></i><h3>MetBook: la base de connaissances vivante de MetLife</h3><p>rhapsody consulte MetBook en temps réel, identifie les omissions d'arguments essentiels et aide le conseiller à mémoriser les compétences de manière naturelle et fluide, sans surcharge cognitive.</p><div class="feedback-natural"><i class="fas fa-comment-dots"></i> <strong>Exemple:</strong> « Vous avez expliqué la couverture mais n'avez pas mentionné le bénéfice de la continuité financière immédiate — l'un des piliers de MetBook. Que diriez-vous d'ajouter cela la prochaine fois ? »</div></div></section>
+        <section id="usecase-fr"><h2><i class="fas fa-bullhorn"></i> 🎯 Cas d'usage: Vente à un médecin pressé</h2><div class="use-case-full"><div class="use-case-title">SIMULATION — METLIFE (VENTE À UN MÉDECIN MANQUANT DE TEMPS)</div><p><strong>🎬 SCÉNARIO</strong><br>Vous êtes un conseiller MetLife, encore en développement. Vous parlez à un médecin: agenda chargé, extrêmement objectif, sceptique quant à l'assurance vie, faible tolérance aux longues conversations. Il a accepté de vous parler mais a précisé: « J'ai peu de minutes. »</p><p><strong>🔴 OBJECTIF</strong><br>Mener la conversation efficacement: générer une perception de valeur, effectuer un diagnostic minimal (ADN), traiter les objections et passer à l'étape suivante ou à la conclusion.</p><p><strong>👥 RÔLES</strong><br>{{user_role}}: conseiller MetLife | {{ai_role}}: médecin (client)</p><p><strong>🧠 PERSONNAGE DU MÉDECIN</strong><br>Pragmatique, direct, valorise le temps avant tout. Haut revenu, peu de temps pour la gestion financière. Déjà approché par d'autres conseillers. Sceptique quant à la réelle nécessité d'une assurance.</p><p><strong>🎯 ATTENTE DU CLIENT</strong><br>Conversation rapide, clarté immédiate de la valeur, pas de discours générique. Veut comprendre « pourquoi c'est important pour moi maintenant ».</p><p><strong>⚠️ RÈGLES DE LA CONVERSATION</strong><br>Réponses courtes (1–2 phrases). Le médecin interrompt s'il perçoit des atermoiements, peut mettre fin à tout moment. N'accepte pas l'approche superficielle ni le discours émotionnel exagéré.</p><p><strong>🔥 AXES D'OBJECTION (dynamiques)</strong><br>Le médecin doit amener: « Je n'ai pas le temps », « J'ai déjà des investissements », « Je n'ai jamais eu besoin d'assurance », « Cela semble plus un coût qu'un bénéfice », « Je préfère m'en occuper plus tard », « J'ai déjà été approché plusieurs fois », « Je ne vois pas d'urgence ». Le conseiller doit en traiter au moins 5 avant de décider.</p><p><strong>📌 BASE METBOOK (OBLIGATOIRE)</strong><br>Le conseiller doit démontrer: rupture de résistance rapide, questions ouvertes intelligentes (ADN), matérialisation du risque, personnalisation de la conversation, conduite objective vers l'étape suivante. Éviter le discours générique, parler uniquement produit ou manque de direction.</p><p><strong>🎤 DÉBUT DE LA SIMULATION</strong><br>« Parlez, mais soyez direct — j'ai peu de temps. »</p><p><strong>🏁 FIN DE LA SIMULATION</strong><br>Après les interactions, le médecin doit soit accepter d'avancer, soit refuser clairement. Réponse finale en 1 phrase.</p><p><strong>📊 DÉBRIEFING (POST-SIMULATION)</strong><br>Analyse automatique avec: points forts, points d'amélioration, moments clés, reformulations suggérées et recommandations.</p><p><strong>⚠️ CRITÈRES D'ÉVALUATION</strong><br><strong>Positif:</strong> objectivité, questions intelligentes, adaptation au client, conduite claire, génération de valeur.<br><strong>Négatif:</strong> atermoiements, discours générique, manque de diagnostic, non-traitement des objections, ne pas faire avancer la conversation.</p></div></section>
+        <section id="beneficios-fr"><h2><i class="fas fa-gift"></i> Avantages du partenariat rhapsody</h2><div class="grid-2col"><ul class="benefit-list"><li><i class="fas fa-check-circle"></i> Standardisation de l'excellence – réduction de la variabilité entre conseillers.</li><li><i class="fas fa-clock"></i> Accélération du cycle de vente – décisions plus rapides.</li><li><i class="fas fa-chart-line"></i> Conversion plus cohérente – approche structurée prévisible.</li><li><i class="fas fa-brain"></i> Apprentissage accéléré – les nouveaux conseillers atteignent la maturité plus vite.</li><li><i class="fas fa-comments"></i> Traitement efficace des objections – réponses adaptatives par profil.</li></ul><ul class="benefit-list"><li><i class="fas fa-chart-pie"></i> Visibilité complète de l'entonnoir – la gestion identifie les goulets en temps réel.</li><li><i class="fas fa-robot"></i> Formation continue évolutive – IA disponible 24/7.</li><li><i class="fas fa-heart"></i> Renforcement de la confiance – conseiller plus sûr.</li><li><i class="fas fa-cogs"></i> Amélioration continue basée sur les données – le playbook évolue avec le terrain.</li><li><i class="fas fa-chart-simple"></i> Meilleure prévisibilité de la performance – moins de dépendance aux talents individuels.</li></ul></div><div class="highlight-gradient"><i class="fas fa-quote-left fa-2x"></i><p>« Nous ne formons pas seulement mieux le conseiller.<br>Nous transformons la conversation en un système évolutif. »</p><p>— rhapsody x MetLife</p></div></section>
     </div>
 
-    <div class="footer-note"><i class="fas fa-check-circle"></i> Versão multilíngue com Use Case completo da MetLife para treinamento de corretores.</div>
+    <div class="footer-note">
+        <i class="fas fa-check-circle"></i> Versão multilíngue | rhapsody x MetLife
+    </div>
 </main>
 
 <script>
-    // Menu mobile
+    // Menu mobile toggle
     const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle?.addEventListener('click', () => navLinks.classList.toggle('open'));
+    const navLinksMobile = document.getElementById('navLinks');
+    if(menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            navLinksMobile.classList.toggle('open');
+        });
+    }
 
-    // Idiomas
-    const langBtns = document.querySelectorAll('.lang-btn');
-    const langContents = { pt: document.getElementById('lang-pt'), en: document.getElementById('lang-en'), fr: document.getElementById('lang-fr') };
-    langBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const lang = btn.dataset.lang;
-            langBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            Object.keys(langContents).forEach(l => langContents[l].classList.remove('active-lang'));
-            if (langContents[lang]) langContents[lang].classList.add('active-lang');
+    // Fechar menu ao clicar em um link (mobile)
+    const mobileLinks = document.querySelectorAll('.nav-links-mobile a');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinksMobile.classList.remove('open');
         });
     });
 
+    // Navegação suave para todos os links de âncora
+    let currentLang = 'pt';
+    
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(`${sectionId}-${currentLang}`);
+        if(element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            scrollToSection(targetId);
+        });
+    });
+    
+    // Links do menu (data-nav)
+    const navLinks = document.querySelectorAll('[data-nav]');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = link.getAttribute('data-nav');
+            scrollToSection(target);
+            if(navLinksMobile) navLinksMobile.classList.remove('open');
+        });
+    });
+
+    // Idiomas
+    const langBtns = document.querySelectorAll('.lang-btn');
+    const langContents = {
+        pt: document.getElementById('lang-pt'),
+        en: document.getElementById('lang-en'),
+        fr: document.getElementById('lang-fr')
+    };
+    
+    const headerTexts = {
+        pt: { pill: "Diagnóstico Estratégico & Solução", title: "rhapsody x MetLife<br>Desbloqueando a performance em seguros de vida", sub: "Como a plataforma rhapsody transforma desafios críticos da MetLife em vantagem competitiva escalável.", pdf: "Salvar apresentação como PDF" },
+        en: { pill: "Strategic Diagnosis & Solution", title: "rhapsody x MetLife<br>Unlocking performance in life insurance", sub: "How the rhapsody platform turns MetLife's critical challenges into scalable competitive advantage.", pdf: "Save presentation as PDF" },
+        fr: { pill: "Diagnostic Stratégique & Solution", title: "rhapsody x MetLife<br>Libérer la performance en assurance vie", sub: "Comment la plateforme rhapsody transforme les défis critiques de MetLife en avantage concurrentiel évolutif.", pdf: "Exporter la présentation en PDF" }
+    };
+    
+    function setLanguage(lang) {
+        currentLang = lang;
+        Object.keys(langContents).forEach(l => langContents[l].classList.remove('active-lang'));
+        langContents[lang].classList.add('active-lang');
+        langBtns.forEach(btn => {
+            if(btn.getAttribute('data-lang') === lang) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        const h = headerTexts[lang];
+        document.getElementById('hero-pill').innerHTML = `<i class="fas fa-chart-line"></i> ${h.pill}`;
+        document.getElementById('hero-title').innerHTML = h.title;
+        document.getElementById('hero-sub').innerText = h.sub;
+        document.getElementById('pdf-text').innerText = h.pdf;
+    }
+    
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+    });
+    
     // PDF print
-    function printPresentation() { window.print(); }
-    document.getElementById('savePdfBtn')?.addEventListener('click', printPresentation);
+    function printPresentation() {
+        window.print();
+    }
+    const pdfBtn = document.getElementById('savePdfBtn');
+    if(pdfBtn) pdfBtn.addEventListener('click', printPresentation);
+    
+    // Iniciar com português
+    setLanguage('pt');
 </script>
 </body>
 </html>
