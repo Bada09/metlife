@@ -8,14 +8,16 @@ from pydantic import BaseModel, Field
 
 from prompt import SYSTEM_PROMPT, build_user_prompt
 
-app = FastAPI(title="Rhapsody Evaluation Agent", version="1.0.0")
+app = FastAPI(title="Rhapsody Evaluation Agent", version="1.1.0")
+
 
 class EvaluationRequest(BaseModel):
     matchbook: str = Field(min_length=1)
     transcript: str = Field(min_length=1)
-    use_case: str = Field(default="unspecified")
+    use_case: str = Field(default="first_visit")
     broker_profile: Optional[str] = None
     competencies: Optional[list[str]] = None
+
 
 class CompetencyResult(BaseModel):
     competency: str
@@ -27,11 +29,13 @@ class CompetencyResult(BaseModel):
     gap: str
     feedback: str
 
+
 class EvaluationResult(BaseModel):
     overall_score: Optional[float]
     top_strength: Optional[str]
     top_development_area: Optional[str]
     next_action: Optional[str]
+    critical_flags: list[str] = []
     competencies: list[CompetencyResult]
 
 
@@ -44,7 +48,7 @@ def get_client() -> OpenAI:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "rhapsody-evaluator-agent"}
+    return {"status": "ok", "service": "rhapsody-evaluator-agent", "version": "1.1.0"}
 
 
 @app.post("/evaluate", response_model=EvaluationResult)
