@@ -3,13 +3,21 @@ import os
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
 from prompt import SYSTEM_PROMPT, build_user_prompt
 from voice_simulation_prompt import VOICE_SIMULATION_SYSTEM_PROMPT, INITIAL_GREETING
 
-app = FastAPI(title="Rhapsody Voice + Evaluation Agent", version="1.2.0")
+app = FastAPI(title="Rhapsody Voice + Evaluation Agent", version="1.2.1")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class EvaluationRequest(BaseModel):
@@ -55,7 +63,7 @@ def get_client() -> OpenAI:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "rhapsody-voice-evaluator", "version": "1.2.0"}
+    return {"status": "ok", "service": "rhapsody-voice-evaluator", "version": "1.2.1"}
 
 
 @app.get("/simulate/start")
