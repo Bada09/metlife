@@ -3,6 +3,7 @@ import os
 from openai import OpenAI
 from prompt import SYSTEM_PROMPT, build_user_prompt
 from voice_simulation_prompt import VOICE_SIMULATION_SYSTEM_PROMPT, INITIAL_GREETING
+from matchbook_config import get_use_case_config
 
 
 def _json(body, status=200):
@@ -30,7 +31,11 @@ def handler(event, context):
             response = client.responses.create(model=model, instructions=VOICE_SIMULATION_SYSTEM_PROMPT, input=prompt + "\n\nResponda agora como Ricardo, mantendo a persona e revelando somente o que for natural neste momento.", temperature=0.7)
             return _json({"text": response.output_text.strip()})
         if path.endswith("/evaluate"):
-            user_prompt = build_user_prompt(body["matchbook"], body["transcript"], body.get("use_case", "unspecified"), body.get("broker_profile"), body.get("competencies"))
+            use_case = body.get("use_case", "first_visit")
+            config = get_use_case_config(use_case)
+            # Matchbook and competencies come from the server-side configuration,
+            # never from the browser request.
+            user_prompt = build_user_prompt(config["matchbook"], body["transcript"], use_case, body.get("broker_profile"), config["competencies"])
             response = client.responses.create(model=model, instructions=SYSTEM_PROMPT, input=user_prompt, temperature=0.1)
             return _json(json.loads(response.output_text))
         return _json({"error": "Not found"}, 404)
