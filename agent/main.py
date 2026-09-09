@@ -7,8 +7,9 @@ from openai import OpenAI
 from pydantic import BaseModel, Field
 
 from prompt import SYSTEM_PROMPT, build_user_prompt
+from voice_simulation_prompt import VOICE_SIMULATION_SYSTEM_PROMPT, INITIAL_GREETING
 
-app = FastAPI(title="Rhapsody Evaluation Agent", version="1.1.0")
+app = FastAPI(title="Rhapsody Voice + Evaluation Agent", version="1.2.0")
 
 
 class EvaluationRequest(BaseModel):
@@ -17,6 +18,12 @@ class EvaluationRequest(BaseModel):
     use_case: str = Field(default="first_visit")
     broker_profile: Optional[str] = None
     competencies: Optional[list[str]] = None
+
+
+class SimulationRequest(BaseModel):
+    conversation: list[dict[str, str]] = Field(default_factory=list)
+    use_case: str = Field(default="first_visit")
+    client_name: str = Field(default="Ricardo Almeida")
 
 
 class CompetencyResult(BaseModel):
@@ -48,7 +55,33 @@ def get_client() -> OpenAI:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "rhapsody-evaluator-agent", "version": "1.1.0"}
+    return {"status": "ok", "service": "rhapsody-voice-evaluator", "version": "1.2.0"}
+
+
+@app.get("/simulate/start")
+def simulation_start():
+    return {"text": INITIAL_GREETING, "use_case": "first_visit", "client": "Ricardo Almeida"}
+
+
+@app.post("/simulate")
+def simulate(request: SimulationRequest):
+    client = get_client()
+    model = os.getenv("OPENAI_MODEL", "gpt-5.6")
+    history = "\n".join(
+        f"{item.get('role', 'broker').upper()}: {item.get('text', '')}"
+        for item in request.conversation[-20:]
+    )
+    user_prompt = f'''/SCENARIO\nUSE_CASE: {request.use_case}\nCLIENT: {request.client_name}\n\n/CONVERSATION_HISTORY\n{history or "Nenhuma fala anterior. Comece pela saudação inicial."}\n\n/INSTRUCTION\nResponda somente com a próxima fala do cliente. Mantenha a persona e as regras do sistema. Não avalie o corretor.'''
+    try:
+        response = client.responses.create(
+            model=model,
+            instructions=VOICE_SIMULATION_SYSTEM_PROMPT,
+            input=user_prompt,
+            temperature=0.7,
+        )
+        return {"text": response.output_text.strip()}
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Simulation failed: {exc}")
 
 
 @app.post("/evaluate", response_model=EvaluationResult)
@@ -62,7 +95,6 @@ def evaluate(request: EvaluationRequest):
         request.broker_profile,
         request.competencies,
     )
-
     try:
         response = client.responses.create(
             model=model,
