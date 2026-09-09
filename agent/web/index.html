@@ -7,11 +7,9 @@
   <style>
     body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 20px;background:#f6f7f9;color:#171717}
     .card{background:white;border-radius:14px;padding:24px;box-shadow:0 4px 20px #00000012;margin-bottom:18px}
-    button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;margin-right:8px}
-    #start{background:#171717;color:white}.recording{background:#b91c1c;color:white}.secondary{background:#e8e8e8}
+    button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;margin:4px}.primary{background:#171717;color:white}.recording{background:#b91c1c;color:white}.secondary{background:#e8e8e8}
     #status{font-weight:700}.bubble{padding:14px;border-radius:12px;margin:10px 0;white-space:pre-wrap}.client{background:#eef2ff}.broker{background:#f2f2f2}
-    textarea{width:100%;min-height:120px;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:12px;font:inherit}
-    .small{font-size:13px;color:#666}.score{font-size:34px;font-weight:800}
+    textarea,input{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:12px;font:inherit}textarea{min-height:120px}.small{font-size:13px;color:#666}.score{font-size:34px;font-weight:800}
   </style>
 </head>
 <body>
@@ -20,16 +18,16 @@
 
   <div class="card">
     <label>URL da API</label>
-    <input id="api" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0 16px" value="http://localhost:8000">
-    <button id="start">Iniciar simulação</button>
+    <input id="api" value="http://localhost:8000">
+    <p><label>Matchbook usado na avaliação</label></p>
+    <textarea id="matchbook" placeholder="Cole aqui o Matchbook oficial do Use Case. Em produção, este campo deve vir do backend."></textarea>
+    <button id="start" class="primary">Iniciar simulação</button>
     <button id="mic" class="secondary" disabled>Falar</button>
     <button id="finish" class="secondary" disabled>Finalizar e avaliar</button>
     <p id="status">Pronto.</p>
   </div>
 
-  <div class="card">
-    <div id="conversation"></div>
-  </div>
+  <div class="card"><div id="conversation"></div></div>
 
   <div class="card" id="manual" style="display:none">
     <label>Texto do corretor (fallback)</label>
@@ -40,16 +38,15 @@
   <div class="card" id="result" style="display:none"></div>
 
 <script>
-const $=id=>document.getElementById(id); let history=[]; let listening=false;
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+const $=id=>document.getElementById(id);let history=[];let listening=false;const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 function add(role,text){history.push({role,text});const d=document.createElement('div');d.className='bubble '+role;d.textContent=(role==='client'?'Ricardo: ':'Você: ')+text;$('conversation').appendChild(d);d.scrollIntoView({behavior:'smooth'});}
-function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u);}}
+function speak(text){if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u);}}
 async function clientReply(){ $('status').textContent='Ricardo está pensando...';const r=await fetch($('api').value+'/simulate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({conversation:history,use_case:'first_visit',client_name:'Ricardo Almeida'})});if(!r.ok)throw new Error(await r.text());const d=await r.json();add('client',d.text);speak(d.text);$('status').textContent='Sua vez.';}
-async function sendBroker(text){if(!text.trim())return;add('broker',text);$('manualText').value='';await clientReply();}
-$('start').onclick=async()=>{history=[];$('conversation').innerHTML='';$('result').style.display='none';try{const r=await fetch($('api').value+'/simulate/start');const d=await r.json();add('client',d.text);speak(d.text);$('mic').disabled=false;$('finish').disabled=false;$('status').textContent='Sua vez.';}catch(e){$('status').textContent='Erro: '+e.message;}};
+async function sendBroker(text){if(!text.trim())return;add('broker',text);$('manualText').value='';try{await clientReply()}catch(e){$('status').textContent='Erro: '+e.message;}}
+$('start').onclick=async()=>{if(!$('matchbook').value.trim()){alert('Cole o Matchbook antes de iniciar.');return}history=[];$('conversation').innerHTML='';$('result').style.display='none';try{const r=await fetch($('api').value+'/simulate/start');const d=await r.json();add('client',d.text);speak(d.text);$('mic').disabled=false;$('finish').disabled=false;$('status').textContent='Sua vez.'}catch(e){$('status').textContent='Erro: '+e.message}};
 $('send').onclick=()=>sendBroker($('manualText').value);
-$('finish').onclick=async()=>{if(history.filter(x=>x.role==='broker').length<1){$('status').textContent='Faça pelo menos uma fala antes de avaliar.';return;}$('status').textContent='Avaliando...';const transcript=history.map(x=>(x.role==='broker'?'BROKER: ':'CLIENT: ')+x.text).join('\n');const r=await fetch($('api').value+'/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({use_case:'first_visit',matchbook:'Use o Matchbook oficial da MetLife fornecido pelo backend.',transcript})});const d=await r.json();if(!r.ok)throw new Error(JSON.stringify(d));$('result').style.display='block';$('result').innerHTML='<h2>Resultado</h2><div class="score">'+(d.overall_score??'—')+'</div><p><b>Força:</b> '+(d.top_strength||'—')+'</p><p><b>Desenvolvimento:</b> '+(d.top_development_area||'—')+'</p><p><b>Próxima ação:</b> '+(d.next_action||'—')+'</p>'+d.competencies.map(c=>'<hr><h3>'+c.competency+' — '+(c.score??'—')+'</h3><p><b>Status:</b> '+c.status+' · <b>Confiança:</b> '+c.confidence+'</p><p><b>Evidência:</b> '+c.evidence+'</p><p><b>Gap:</b> '+c.gap+'</p><p><b>Feedback:</b> '+c.feedback+'</p>').join('');$('status').textContent='Avaliação concluída.';};
-if(SpeechRecognition){const rec=new SpeechRecognition();rec.lang='pt-BR';rec.interimResults=false;rec.continuous=false;rec.onstart=()=>{listening=true;$('mic').textContent='Ouvindo...';$('mic').classList.add('recording');$('status').textContent='Fale agora.'};rec.onend=()=>{listening=false;$('mic').textContent='Falar';$('mic').classList.remove('recording')};rec.onerror=e=>{$('status').textContent='Erro no microfone: '+e.error};rec.onresult=e=>sendBroker(e.results[0][0].transcript);$('mic').onclick=()=>{if(listening)rec.stop();else rec.start()};}else{$('mic').style.display='none';$('manual').style.display='block';$('status').textContent='Reconhecimento de voz não disponível neste navegador. Use o campo de texto.';}
+$('finish').onclick=async()=>{if(history.filter(x=>x.role==='broker').length<1){$('status').textContent='Faça pelo menos uma fala antes de avaliar.';return}$('status').textContent='Avaliando...';const transcript=history.map(x=>(x.role==='broker'?'BROKER: ':'CLIENT: ')+x.text).join('\n');try{const r=await fetch($('api').value+'/evaluate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({use_case:'first_visit',matchbook:$('matchbook').value,transcript})});const d=await r.json();if(!r.ok)throw new Error(JSON.stringify(d));$('result').style.display='block';$('result').innerHTML='<h2>Resultado</h2><div class="score">'+(d.overall_score??'—')+'</div><p><b>Força:</b> '+(d.top_strength||'—')+'</p><p><b>Desenvolvimento:</b> '+(d.top_development_area||'—')+'</p><p><b>Próxima ação:</b> '+(d.next_action||'—')+'</p>'+d.competencies.map(c=>'<hr><h3>'+c.competency+' — '+(c.score??'—')+'</h3><p><b>Status:</b> '+c.status+' · <b>Confiança:</b> '+c.confidence+'</p><p><b>Evidência:</b> '+c.evidence+'</p><p><b>Gap:</b> '+c.gap+'</p><p><b>Feedback:</b> '+c.feedback+'</p>').join('');$('status').textContent='Avaliação concluída.'}catch(e){$('status').textContent='Erro na avaliação: '+e.message}};
+if(SpeechRecognition){const rec=new SpeechRecognition();rec.lang='pt-BR';rec.interimResults=false;rec.continuous=false;rec.onstart=()=>{listening=true;$('mic').textContent='Ouvindo...';$('mic').classList.add('recording');$('status').textContent='Fale agora.'};rec.onend=()=>{listening=false;$('mic').textContent='Falar';$('mic').classList.remove('recording')};rec.onerror=e=>{$('status').textContent='Erro no microfone: '+e.error};rec.onresult=e=>sendBroker(e.results[0][0].transcript);$('mic').onclick=()=>{if(listening)rec.stop();else rec.start()}}else{$('mic').style.display='none';$('manual').style.display='block';$('status').textContent='Reconhecimento de voz não disponível neste navegador. Use o campo de texto.'}
 </script>
 </body>
 </html>
