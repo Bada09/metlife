@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "functions": {
+    "agent/api_vercel.py": {"runtime": "vercel-python@latest"}
+  },
+  "routes": [
+    {"src": "/api/(.*)", "dest": "/agent/api_vercel.py"}
+  ]
+}
